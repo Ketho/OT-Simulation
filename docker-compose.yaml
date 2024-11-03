@@ -3,8 +3,6 @@ services:
     database:
         container_name: database
         image: mysql/mysql-server:8.0.32
-        # ports:
-        #     - "3306:3306" # Database shouldnt be exposed to host.
         environment:
             - MYSQL_ROOT_PASSWORD=root
             - MYSQL_USER=root
@@ -27,7 +25,7 @@ services:
             - "8081:8080"
         depends_on:
             - database
-        expose: ["8080", "8000"] # May not be needed
+        expose: ["8080"] # May not be needed
         volumes:
             - ./scadalts/tomcat_log:/usr/local/tomcat/logs:rw
         links:
@@ -71,6 +69,8 @@ services:
         build:
             context: ./epanet/.
             dockerfile: Dockerfile
+        volumes:
+            - ./epanet/app:/app
         networks:
             - net_openplc_epanet
 
@@ -83,7 +83,7 @@ services:
           bash -c "
             apt-get update &&
             apt-get install -y iputils-ping &&
-            ping google.com
+            ping -c 4 google.com
             tail -f /dev/null
            "
         networks:
@@ -93,6 +93,7 @@ services:
         container_name: suricata
         image: jasonish/suricata:latest
         cap_add:
+            - SYS_NICE
             - NET_ADMIN
             - NET_RAW
         networks:
@@ -100,8 +101,10 @@ services:
             - net_scadalts_openplc
             - net_operator_scadalts
         volumes:
-            - /var/log/suricata:/var/log/suricata  # Logs can be accessed here
-        command: ["-i", "eth0"]
+            - ./suricata/var/log/suricata:/var/log/suricata  # The Suricata log directory.
+            - ./suricata/var/lib/suricata:/var/lib/suricata  # Rules, Suricata-Update cache and other runtime data that may be useful to retain between runs.
+            - ./suricata/etc/suricata:/etc/suricata          # The configuration directory
+        command: -i eth0 -i eth1 -i eth2
 
 networks:
     net_database_scadalts:
@@ -112,4 +115,3 @@ networks:
         driver: bridge
     net_operator_scadalts:
         driver: bridge
-
