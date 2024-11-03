@@ -1,0 +1,20 @@
+version: "3"
+services:
+  OpenPLCv3:
+    container_name: OpenPLCv3
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        script: script.st
+        database: database.sh
+    expose:
+      - "502"
+      - "8080"
+      - "20000"
+      - "44818"
+    ports:
+      - "502:502"
+      - "8080:8080"
+      - "20000:20000"
+      - "44818:44818"

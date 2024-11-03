@@ -1,0 +1,115 @@
+version: '3'
+services:
+    database:
+        container_name: database
+        image: mysql/mysql-server:8.0.32
+        # ports:
+        #     - "3306:3306" # Database shouldnt be exposed to host.
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=root
+            - MYSQL_PASSWORD=root
+            - MYSQL_DATABASE=scadalts
+        expose: ["3306"]
+        volumes:
+            - ./scadalts/db_data:/var/lib/mysql:rw
+            - ./scadalts/db_conf:/etc/mysql:ro
+        command: --log_bin_trust_function_creators=1
+        networks:
+            - net_database_scadalts
+
+    scadalts:
+        container_name: scadalts
+        image: scadalts/scadalts:latest
+        environment:
+            - CATALINA_OPTS=-Xmx2G -Xms2G
+        ports:
+            - "8081:8080"
+        depends_on:
+            - database
+        expose: ["8080", "8000"] # May not be needed
+        volumes:
+            - ./scadalts/tomcat_log:/usr/local/tomcat/logs:rw
+        links:
+            - database:database
+        command:
+            - /usr/bin/wait-for-it
+            - --host=database
+            - --port=3306
+            - --timeout=30
+            - --strict
+            - --
+            - /usr/local/tomcat/bin/catalina.sh
+            - run
+        networks:
+            - net_database_scadalts
+            - net_scadalts_openplc
+            - net_operator_scadalts
+
+    openplc:
+        container_name: openplc
+        depends_on:
+            - scadalts
+        build:
+          context: ./openplc/.
+          dockerfile: Dockerfile
+          args:
+            script: script.st
+            database: database.sh
+        expose:
+          - "502"
+        ports:
+          - "8080:8080"
+        networks:
+            - net_openplc_epanet
+            - net_scadalts_openplc
+
+    epanet:
+        container_name: epanet
+        depends_on:
+            - openplc
+        build:
+            context: ./epanet/.
+            dockerfile: Dockerfile
+        networks:
+            - net_openplc_epanet
+
+    operator:
+        image: ubuntu:latest
+        container_name: operator
+        depends_on:
+            - scadalts
+        command: >
+          bash -c "
+            apt-get update &&
+            apt-get install -y iputils-ping &&
+            ping google.com
+            tail -f /dev/null
+           "
+        networks:
+            - net_operator_scadalts
+
+    suricata:
+        container_name: suricata
+        image: jasonish/suricata:latest
+        cap_add:
+            - NET_ADMIN
+            - NET_RAW
+        networks:
+            - net_openplc_epanet
+            - net_scadalts_openplc
+            - net_operator_scadalts
+        volumes:
+            - /var/log/suricata:/var/log/suricata  # Logs can be accessed here
+        command: ["-i", "eth0"]
+
+networks:
+    net_database_scadalts:
+        driver: bridge
+    net_openplc_epanet:
+        driver: bridge
+    net_scadalts_openplc:
+        driver: bridge
+    net_operator_scadalts:
+        driver: bridge
+
