@@ -1,8 +1,0 @@
-version: '3.8'  # You can specify your desired Compose file version
-
-services:
-  epanet:
-    container_name: epanet
-    build:
-      context: .  # Path to the directory containing the Dockerfile
-      dockerfile: Dockerfile
