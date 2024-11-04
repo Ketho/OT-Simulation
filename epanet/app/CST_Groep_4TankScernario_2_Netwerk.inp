@@ -81,7 +81,7 @@
 ;Tank            	Model
 
 [TIMES]
- Duration           	0
+ Duration           	24
  Hydraulic Timestep 	1:00
  Quality Timestep   	0:05
  Pattern Timestep   	1:00
@@ -97,7 +97,7 @@
  Page               	0
 
 [OPTIONS]
- Units              	GPM
+ Units              	LPM
  Headloss           	H-W
  Specific Gravity   	1
  Viscosity          	1
