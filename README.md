@@ -6,6 +6,8 @@
 - docker compose
 
 # To run
+```
 - git clone https://github.com/Ketho/OT-Simulation
 - cd OT-Simulation
 - docker compose up -d
+```
