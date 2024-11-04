@@ -78,8 +78,6 @@ def fromOpenPLC(client):
         print(">--- Failed to retrieve pipe controls ---")
     else:
         controls['pipe_controls'] = pipe_controls.bits
-    print(controls['pump_controls']) # TEST PURPOSE
-    print(controls['pipe_controls']) # TEST PURPOSE
 
     return controls
 
