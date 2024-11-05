@@ -96,6 +96,21 @@ def main(inp_file):
         n.openHydraulicAnalysis()
         n.initializeHydraulicAnalysis()
 
+        # Print network component ammount
+        elements = {
+            "Tanks": n.getNodeTankCount,
+            "Reservoirs": n.getNodeReservoirCount,
+            "Junctions": n.getNodeJunctionCount,
+            "Pipes": n.getLinkPipeCount,
+            "Pumps": n.getLinkPumpCount,
+            "Valves": n.getLinkValveCount
+        }
+
+        print("Network Element Counts:")
+        print("-----------------------")
+        for name, func in elements.items():
+            print(f"{name:<12}: {func():>5}")
+        
         while True:
             # Update the simulation duration
             n.setTimeSimulationDuration(n.getTimeSimulationDuration() +
