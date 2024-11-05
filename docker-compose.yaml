@@ -83,7 +83,7 @@ services:
           bash -c "
             apt-get update &&
             apt-get install -y iputils-ping &&
-            ping -c 4 google.com
+            ping -c 4 google.com &&
             tail -f /dev/null
            "
         networks:
