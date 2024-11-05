@@ -39,17 +39,17 @@ def toOpenPLC(client, data):
     converted_tank_heads = []
     for tank_head in data['tank_heads']:
         converted_tank_heads.extend(client.convert_to_registers(tank_head, client.DATATYPE.FLOAT32))
-    client.write_registers(0, converted_tank_heads)
+    client.write_registers(100, converted_tank_heads)
 
     converted_pump_flows = []
     for pump_flow in data['pump_flows']:
         converted_pump_flows.extend(client.convert_to_registers(pump_flow, client.DATATYPE.FLOAT32))
-    client.write_registers(100, converted_pump_flows)
+    client.write_registers(200, converted_pump_flows)
 
     converted_junction_pressures = []
     for junction_pressure in data['junction_pressures']:
         converted_junction_pressures.extend(client.convert_to_registers(junction_pressure, client.DATATYPE.FLOAT32))
-    client.write_registers(200, converted_junction_pressures)
+    client.write_registers(300, converted_junction_pressures)
 
     # VALVE LOGIC HERE...
 
