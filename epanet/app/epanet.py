@@ -16,10 +16,10 @@ def applyControls(n, controls):
     for i in range(min(len(pump_ids), len(pump_controls))):
         n.setLinkSettings(pump_ids[i], pump_controls[i])  # Set the speed for each pump
 
-    # Open or close pipes 0 = Closed, 1 = Open
+    # Open or close pipes 1 = Closed, 0 = Open (values are inverted in code so open plc 0 = open )
     pipe_ids = n.getLinkPipeIndex()
     for i in range(min(len(pipe_ids), len(pipe_controls))):
-        n.setLinkStatus(pipe_ids[i], pipe_controls[i])
+        n.setLinkStatus(pipe_ids[i], ~pipe_controls[i] & 1)
 
 def readValues(n):
     # Initialize a dictionary to store the retrieved data
