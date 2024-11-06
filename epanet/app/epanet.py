@@ -53,7 +53,7 @@ def toOpenPLC(client, data):
 
     # VALVE LOGIC HERE...
 
-    print(data)
+    #print(data)
 
 def fromOpenPLC(client):
     controls = {
