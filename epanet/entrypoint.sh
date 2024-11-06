@@ -10,4 +10,4 @@ if [ -z "$INP_FILE" ]; then
 fi
 
 # Run the Python script with the found .inp file as argv2
-python /app/epanet.py "$INP_FILE"
+python -u /app/epanet.py "$INP_FILE"
