@@ -66,10 +66,10 @@ def apply_openplc_controls_to_epanet(epanet_network: epanet, openplc_controls: d
 def read_epanet_data(epanet_network: epanet) -> dict:
     try:
         junction_pressures = [
-            float(epanet_network.getNodePressure(i)) for i in epanet_network.getNodeJunctionIndex()
+            epanet_network.getNodePressure(i) for i in epanet_network.getNodeJunctionIndex()
         ]
         tank_heads = [
-            float(epanet_network.getNodeHydraulicHead(i)) for i in epanet_network.getNodeTankIndex()
+            epanet_network.getNodeHydraulicHead(i) for i in epanet_network.getNodeTankIndex()
         ]
         pump_flows = [
             epanet_network.getLinkFlows(i) for i in epanet_network.getLinkPumpIndex()
@@ -128,7 +128,7 @@ def main():
             
             epanet_data = read_epanet_data(epanet_network=epanet_network)
             write_epanet_data_to_openplc(modbus_client=modbus_client, epanet_data=epanet_data)
-            
+
             epanet_network.nextHydraulicAnalysisStep()
             time.sleep(1)
     except KeyboardInterrupt:
@@ -145,5 +145,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
