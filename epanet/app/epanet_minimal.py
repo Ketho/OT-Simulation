@@ -24,7 +24,7 @@ try:
 
         # Set OpenPLC controls to EPANET.
         for i, status in zip(en.getLinkPipeIndex(), controls['pipe_statusses']): en.setLinkStatus(i, status)
-        for i, setting in zip(en.getLinkPumpIndex(), controls['pump_settings']): en.setLinkSettings(i, setting)
+        for i, setting in zip(en.getLinkPumpIndex(), controls['pump_settings']): en.setLinkSettings(i, setting) # ~setting & 1
 
         en.runHydraulicAnalysis()
 
