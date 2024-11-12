@@ -19,16 +19,20 @@ try:
     while True:
         en.setTimeSimulationDuration(en.getTimeSimulationDuration() + en.getTimeHydraulicStep()) # this way the duration is set to infinite.
 
+        # Get controls
         controls = {'pipe': client.read_coils(0, 100).bits, 'pump': client.read_holding_registers(0, 100).registers}
-        
+
+        # Set controls
         for i, control in zip(en.getLinkPipeIndex(), controls['pipe']): en.setLinkStatus(i, control)
         for i, control in zip(en.getLinkPumpIndex(), controls['pump']): en.setLinkSettings(i, ~control & 1)
 
         en.runHydraulicAnalysis()
 
+        # Get data
         data = {'junction_pressures': [float(en.getNodePressure(i)) for i in en.getNodeJunctionIndex()], 'tank_heads': [float(en.getNodeHydraulicHead(i)) for i in en.getNodeTankIndex()], 'pump_flows': [float(en.getLinkFlows(i)) for i in en.getLinkPumpIndex()]}
         print(data)
 
+        # Write data
         for i, value in enumerate(data['junction_pressures']):
             registers = client.convert_to_registers(value, client.DATATYPE.FLOAT32)
             client.write_registers(100 + i * 2, registers)
