@@ -28,7 +28,7 @@ try:
 
         en.runHydraulicAnalysis()
 
-        # Get data from EPANET
+        # Read data from EPANET
         data = {'junction_pressures': [float(en.getNodePressure(i)) for i in en.getNodeJunctionIndex()], 'tank_heads': [float(en.getNodeHydraulicHead(i)) for i in en.getNodeTankIndex()], 'pump_flows': [float(en.getLinkFlows(i)) for i in en.getLinkPumpIndex()]}
         print(data)
 
