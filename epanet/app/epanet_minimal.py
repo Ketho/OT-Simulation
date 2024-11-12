@@ -5,14 +5,14 @@ from pymodbus.client import ModbusTcpClient
 
 import time
 
-client = ModbusTcpClient(host='openplc', port=502)
-while not client.connect(): time.sleep(1)
-
-en = epanet('net1_tank_scenario.inp')
-en.setTimeSimulationDuration(24 * 60 * 60) # initial setup; duration will be set to infinite in main function.
-en.setTimeHydraulicStep(60 * 60)
-
 try:
+    client = ModbusTcpClient(host='openplc', port=502)
+    while not client.connect(): time.sleep(1)
+
+    en = epanet('net1_tank_scenario.inp')
+    en.setTimeSimulationDuration(24 * 60 * 60) # initial setup; duration will be set to infinite in main function.
+    en.setTimeHydraulicStep(60 * 60)
+
     en.openHydraulicAnalysis()
     en.initializeHydraulicAnalysis()
 
@@ -24,7 +24,7 @@ try:
 
         # Set OpenPLC controls to EPANET.
         for i, status in zip(en.getLinkPipeIndex(), controls['pipe_statusses']): en.setLinkStatus(i, status)
-        for i, setting in zip(en.getLinkPumpIndex(), controls['pump_settings']): en.setLinkSettings(i, ~setting & 1)
+        for i, setting in zip(en.getLinkPumpIndex(), controls['pump_settings']): en.setLinkSettings(i, setting)
 
         en.runHydraulicAnalysis()
 
