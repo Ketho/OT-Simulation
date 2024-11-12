@@ -5,7 +5,7 @@ from pymodbus.client import ModbusTcpClient
 
 import time
 
-client = ModbusTcpClient(host='127.0.0.1', port=502)
+client = ModbusTcpClient(host='openplc', port=502)
 while not client.connect(): time.sleep(1)
 
 en = epanet('net1_tank_scenario.inp')
