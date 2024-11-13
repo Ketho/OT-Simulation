@@ -44,8 +44,8 @@ def setup_epanet(network_file: str) -> epanet:
     """Setup EPANET with specified network (.inp) file."""
     try:
         en = epanet(network_file)
-        en.setTimeSimulationDuration(10000) # initial setup; duration will be set to infinite in main function.
-        en.setTimeHydraulicStep(1000)
+        en.setTimeSimulationDuration(10) # initial setup; duration will be set to infinite in main function.
+        en.setTimeHydraulicStep(1)
         return en
     except Exception as e:
         print(f"Failed to setup EPANET with specified network (.inp) file: {e}")
