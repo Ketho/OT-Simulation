@@ -10,12 +10,12 @@ def print_overview(en: epanet) -> None:
     print("Network Element Counts:")
     print(f"+{'-' * 15}+{'-' * 10}+")
     elements = {
-        'Junctions': en.getNodeJunctionCount(), 
-        'Reservoirs': en.getNodeReservoirCount(), 
-        'Tanks': en.getNodeTankCount(), 
-        'Pipes': en.getLinkPipeCount(), 
-        'Pumps': en.getLinkPumpCount(), 
-        'Valves': en.getLinkValveCount()
+        'junctions': en.getNodeJunctionCount(), 
+        'reservoirs': en.getNodeReservoirCount(), 
+        'tanks': en.getNodeTankCount(), 
+        'pipes': en.getLinkPipeCount(), 
+        'pumps': en.getLinkPumpCount(), 
+        'valves': en.getLinkValveCount()
     }
     for label, count in elements.items():
         print(f"| {label:<14}|{count:>9} |")
