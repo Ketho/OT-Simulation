@@ -25,7 +25,7 @@ def main():
             controls = {'pipe_statuses': client.read_coils(0, 100).bits, 'pump_settings': [i / 100.0 for i in client.read_holding_registers(0, 100).registers]}
 
             # Set OpenPLC controls to EPANET network.
-            for i, status in zip(en.getLinkPipeIndex(), controls['pipe_statuses']): en.setLinkStatus(i, status)
+            for i, status in zip(en.getLinkPipeIndex(), controls['pipe_statuses']): en.setLinkStatus(i, ~status) 
             for i, setting in zip(en.getLinkPumpIndex(), controls['pump_settings']): en.setLinkSettings(i, setting)
 
             en.runHydraulicAnalysis()
