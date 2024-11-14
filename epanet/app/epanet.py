@@ -66,9 +66,7 @@ def set_controls(en: epanet, controls: dict) -> None:
     """Set OpenPLC controls to EPANET network."""
     try:
         for i, status in zip(en.getLinkPipeIndex(), controls['pipe_statuses']): 
-            en.setLinkStatus(i, status)
-        print(' - '.join([f"\033[{i}m{'Niet zo GAY doen Menno'}\033[0m" 
-        for i in [31, 32, 33, 34, 35, 36, 37] * 15][:100]))
+            en.setLinkStatus(i, ~status)
         for i, setting in zip(en.getLinkPumpIndex(), controls['pump_settings']): 
             en.setLinkSettings(i, setting)
     except Exception as e:
