@@ -7,27 +7,27 @@ import sys
 import time
 
 def print_overview(en: epanet) -> None:
-    print("Network Element Counts:")
-    print(f"+{'-' * 15}+{'-' * 10}+")
-    elements = {
-        'junctions': en.getNodeJunctionCount(), 
-        'reservoirs': en.getNodeReservoirCount(), 
-        'tanks': en.getNodeTankCount(), 
-        'pipes': en.getLinkPipeCount(), 
-        'pumps': en.getLinkPumpCount(), 
-        'valves': en.getLinkValveCount()
-    }
-    for label, count in elements.items():
-        print(f"| {label:<14}|{count:>9} |")
-        print(f"+{'-' * 15}+{'-' * 10}+")
+    """Print overview of total number nodes and links in EPANET network."""
+    try:
+        print("Network Overview:")
+        print("-" * 32)
+        print(f" junctions : {en.getNodeJunctionCount()}")
+        print(f"reservoirs : {en.getNodeReservoirCount()}")
+        print(f"     tanks : {en.getNodeTankCount()}")
+        print(f"     pipes : {en.getLinkPipeCount()}")
+        print(f"     pumps : {en.getLinkPumpCount()}")
+        print(f"    valves : {en.getLinkValveCount()}")
+    except Exception as e:
+        print(f"Failed to print overview of total number nodes and links in EPANET network: {e}")
+        sys.exit(1)
 
 def parse_arguments() -> str:
     """Parse command line arguments to retrieve EPANET network file."""
-    if len(sys.argv) != 3 or sys.argv[1] != '--network':
+    if len(sys.argv) != 2 or not sys.argv[1].endswith('.inp'):
         print("Run EPANET simulation with Modbus controls.")
-        print(f">>> python {sys.argv[0]} --network [network.inp]")
+        print(f">>> python {sys.argv[0]} [network.inp]")
         sys.exit(1)
-    return sys.argv[2]
+    return sys.argv[1]
 
 def setup_client() -> ModbusTcpClient:
     """Setup and establish a Modbus TCP client connection."""
@@ -55,7 +55,7 @@ def get_controls(client: ModbusTcpClient) -> dict:
     """Get controls from OpenPLC."""
     try:
         return {
-            'pipe_statuses': client.read_coils(0, 100).bits, 
+            'pipe_statuses': [i ^ 1 for i in client.read_coils(0, 100).bits], # using bitwise XOR (^) operator to set default pipe status to 1 (open).
             'pump_settings': [i / 100.0 for i in client.read_holding_registers(0, 100).registers]
         }
     except Exception as e:
@@ -66,7 +66,7 @@ def set_controls(en: epanet, controls: dict) -> None:
     """Set OpenPLC controls to EPANET network."""
     try:
         for i, status in zip(en.getLinkPipeIndex(), controls['pipe_statuses']): 
-            en.setLinkStatus(i, ~status)
+            en.setLinkStatus(i, status)
         for i, setting in zip(en.getLinkPumpIndex(), controls['pump_settings']): 
             en.setLinkSettings(i, setting)
     except Exception as e:
