@@ -32,7 +32,7 @@ def parse_arguments() -> str:
 def setup_client() -> ModbusTcpClient:
     """Setup and establish a Modbus TCP client connection."""
     try:
-        client = ModbusTcpClient(host='127.0.0.1', port=502)
+        client = ModbusTcpClient(host='openplc', port=502)
         while not client.connect(): 
             time.sleep(1) # retrying every second until a successful connection is established.
         return client
