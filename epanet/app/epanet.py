@@ -60,7 +60,7 @@ def get_controls(client: ModbusTcpClient) -> dict:
     try:
         return {
             'pipe_statuses': [i ^ 1 for i in client.read_coils(0, 100).bits], # using bitwise XOR (^) operator to set default pipe status to 1 (open).
-            'pump_settings': [i / 100.0 for i in client.read_holding_registers(0, 100).registers]
+            'pump_settings': [i / 100.0 for i in client.read_holding_registers(0, 100).registers] # convert incoming integers to float values (e.g. 100 = 1.0) for ease of use, as default pump setting is 1.0.
         }
     except Exception as e:
         print(f"Failed to get controls from OpenPLC: {e}")
