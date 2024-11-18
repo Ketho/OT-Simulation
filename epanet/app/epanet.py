@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
+"""Run EPANET simulation with Modbus controls.
 
+Usage:
+    python script.py [network.inp]
+"""
 from epyt import epanet
 from pymodbus.client import ModbusTcpClient
 
