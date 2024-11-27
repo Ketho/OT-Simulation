@@ -78,7 +78,7 @@ services:
       - ./scadalts/db_data:/var/lib/mysql:rw
       - ./scadalts/db_conf:/etc/mysql:ro
     command: --log_bin_trust_function_creators=1
-    network:
+    networks:
       - database
 
   operator:
