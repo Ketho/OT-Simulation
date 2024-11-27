@@ -198,6 +198,20 @@ services:
     networks:
       - opensearch-net
 
+  suricata:
+    container_name: suricata
+    image: jasonish/suricata:latest
+    cap_add:
+      - SYS_NICE
+      - NET_ADMIN
+      - NET_RAW
+    network_mode: "host"
+    volumes:
+      - ./suricata/var/log/suricata:/var/log/suricata
+      - ./suricata/var/lib/suricata:/var/lib/suricata
+      - ./suricata/etc/suricata:/etc/suricata
+    command: -i eth0
+
 volumes:
   opensearch-data1:
 
