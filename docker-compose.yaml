@@ -48,8 +48,6 @@ services:
       - "8080"
     volumes:
       - ./scadalts/tomcat_log:/usr/local/tomcat/logs:rw
-    links:
-      - database:database
     command:
       [
         "/usr/bin/wait-for-it",
@@ -64,6 +62,7 @@ services:
     networks:
       - intranet
       - plc_network
+      - database
 
   database:
     container_name: database
@@ -79,6 +78,8 @@ services:
       - ./scadalts/db_data:/var/lib/mysql:rw
       - ./scadalts/db_conf:/etc/mysql:ro
     command: --log_bin_trust_function_creators=1
+    network:
+      - database
 
   operator:
     container_name: operator
@@ -208,4 +209,6 @@ networks:
   zone2:
     driver: bridge
   zone3:
+    driver: bridge
+  database:
     driver: bridge
