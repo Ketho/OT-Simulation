@@ -78,8 +78,6 @@ services:
       - ./scadalts/db_data:/var/lib/mysql:rw
       - ./scadalts/db_conf:/etc/mysql:ro
     command: --log_bin_trust_function_creators=1
-    network:
-      - database
 
   operator:
     container_name: operator
@@ -166,38 +164,68 @@ services:
       - plc_network
 
   # Monitoring
-  opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:1.3.1
+  opensearch-node1:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch-node1
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node1
+      - discovery.seed_hosts=opensearch-node1,opensearch-node2
+      - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}  # in .env file
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
+    volumes:
+      - opensearch-data1:/usr/share/opensearch/data
     ports:
-      - "5601:5601"
-    env_file:
-      - opensearch/opensearchdashboards.env
-    links:
-      - opensearch:opensearch
-
-  opensearch:
-    image: opensearchproject/opensearch:1.3.1
-    env_file:
-      - opensearch/opensearch.env
+      - 9200:9200
+      - 9600:9600 
+    networks:
+      - opensearch-net
+  opensearch-node2:
+    image: opensearchproject/opensearch:latest
+    container_name: opensearch-node2
+    environment:
+      - cluster.name=opensearch-cluster
+      - node.name=opensearch-node2
+      - discovery.seed_hosts=opensearch-node1,opensearch-node2
+      - cluster.initial_cluster_manager_nodes=opensearch-node1,opensearch-node2
+      - bootstrap.memory_lock=true
+      - OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m
+      - OPENSEARCH_INITIAL_ADMIN_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+      nofile:
+        soft: 65536
+        hard: 65536
     volumes:
-      - ./data:/usr/share/opensearch/data
+      - opensearch-data2:/usr/share/opensearch/data
+    networks:
+      - opensearch-net
+  opensearch-dashboards:
+    image: opensearchproject/opensearch-dashboards:latest
+    container_name: opensearch-dashboards
+    ports:
+      - 5601:5601
     expose:
-      - "9200"
-      - "9300"
+      - '5601'
+    environment:
+      OPENSEARCH_HOSTS: '["https://opensearch-node1:9200","https://opensearch-node2:9200"]'
+    networks:
+      - opensearch-net
 
-  suricata:
-    container_name: suricata
-    image: jasonish/suricata:latest
-    cap_add:
-      - SYS_NICE
-      - NET_ADMIN
-      - NET_RAW
-    network_mode: "host"
-    volumes:
-      - ./suricata/var/log/suricata:/var/log/suricata
-      - ./suricata/var/lib/suricata:/var/lib/suricata
-      - ./suricata/etc/suricata:/etc/suricata
-    command: -i eth0
+volumes:
+  opensearch-data1:
+  opensearch-data2:
 
 networks:
   intranet:
@@ -212,3 +240,4 @@ networks:
     driver: bridge
   database:
     driver: bridge
+  opensearch-net:
