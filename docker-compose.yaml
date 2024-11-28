@@ -12,9 +12,7 @@ services:
     volumes:
       - ./epanet/app:/app
     networks:
-      - zone1
-      - zone2
-      - zone3
+      - plc_network
 
   # Central systems
   openplc:
