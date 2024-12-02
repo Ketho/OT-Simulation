@@ -35,7 +35,7 @@ services:
 
   scadalts:
     container_name: scadalts
-    image: scadalts/scadalts:latest
+    image: scadalts/scadalts:v2.7.5.2
     environment:
       - CATALINA_OPTS=-Xmx2G -Xms2G
     ports:
