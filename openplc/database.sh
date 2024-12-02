@@ -15,15 +15,15 @@ SQL_REMOVE_DEVICE="DELETE FROM Slave_dev"
 sqlite3 /OpenPLC_v3/webserver/openplc.db "$SQL_REMOVE_DEVICE"
 
 # add new slave device. modify and copy this line if need to add more slaves
-SQL_SLAVE_Dev_1="INSERT INTO Slave_dev (dev_name, dev_type, slave_id, ip_address, ip_port, di_start, di_size, coil_start, coil_size, ir_start, ir_size, hr_read_start, hr_read_size, hr_write_start, hr_write_size) VALUES ('Slave Name', 'TCP', 0, '192.168.1.1', 502, 0, 80, 0, 80, 0, 80, 0, 80, 0, 80);"
+SQL_SLAVE_Dev_1="INSERT INTO Slave_dev (dev_name, dev_type, slave_id, ip_address, ip_port, di_start, di_size, coil_start, coil_size, ir_start, ir_size, hr_read_start, hr_read_size, hr_write_start, hr_write_size) VALUES ('plc 1', 'TCP', 0, 'plc1', 502, 0, 80, 0, 80, 0, 80, 0, 80, 0, 80);"
 sqlite3 /OpenPLC_v3/webserver/openplc.db "$SQL_SLAVE_Dev_1"
 
 # Slave device 2
-SQL_SLAVE_Dev_2="INSERT INTO Slave_dev (dev_name, dev_type, slave_id, ip_address, ip_port, di_start, di_size, coil_start, coil_size, ir_start, ir_size, hr_read_start, hr_read_size, hr_write_start, hr_write_size) VALUES ('Slave Name 2', 'TCP', 1, '192.168.1.2', 502, 0, 80, 0, 80, 0, 80, 0, 80, 0, 80);"
+SQL_SLAVE_Dev_2="INSERT INTO Slave_dev (dev_name, dev_type, slave_id, ip_address, ip_port, di_start, di_size, coil_start, coil_size, ir_start, ir_size, hr_read_start, hr_read_size, hr_write_start, hr_write_size) VALUES ('plc 2', 'TCP', 1, 'plc2', 502, 0, 80, 0, 80, 0, 80, 0, 80, 0, 80);"
 sqlite3 /OpenPLC_v3/webserver/openplc.db "$SQL_SLAVE_Dev_2"
 
 # Slave device 3
-SQL_SLAVE_Dev_3="INSERT INTO Slave_dev (dev_name, dev_type, slave_id, ip_address, ip_port, di_start, di_size, coil_start, coil_size, ir_start, ir_size, hr_read_start, hr_read_size, hr_write_start, hr_write_size) VALUES ('Slave Name 3', 'TCP', 2, '192.168.1.3', 502, 0, 80, 0, 80, 0, 80, 0, 80, 0, 80);"
+SQL_SLAVE_Dev_3="INSERT INTO Slave_dev (dev_name, dev_type, slave_id, ip_address, ip_port, di_start, di_size, coil_start, coil_size, ir_start, ir_size, hr_read_start, hr_read_size, hr_write_start, hr_write_size) VALUES ('plc 3', 'TCP', 2, 'plc3', 502, 0, 80, 0, 80, 0, 80, 0, 80, 0, 80);"
 sqlite3 /OpenPLC_v3/webserver/openplc.db "$SQL_SLAVE_Dev_3"
 
 # Change or disable Modbus port. Comment out if not requried.
