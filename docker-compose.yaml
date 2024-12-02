@@ -106,7 +106,7 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: database.sh
+        database: slave.sh
     expose:
       - "502"  # Only port 502 exposed as this will be a PLC slave
     networks:
@@ -131,7 +131,7 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: database.sh
+        database: slave.sh
     expose:
       - "502"
     networks:
@@ -156,7 +156,7 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: database.sh
+        database: slave.sh
     expose:
       - "502"
     networks:
