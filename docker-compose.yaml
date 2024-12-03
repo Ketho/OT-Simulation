@@ -24,7 +24,7 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: database.sh
+        database: master.sh
     expose:
       - "8080" 
       - "502" # Access for ScadaLTS
