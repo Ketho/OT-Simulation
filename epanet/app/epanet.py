@@ -87,10 +87,10 @@ def write_data(client: ModbusTcpClient, data: dict) -> None:
                     address = zone_offset + element_offset
                     client.write_registers(address, registers)
                     
-                    # print(f"writing value {v} (converted to registers: {registers}) from {zone} -> {element} -> {k} to register address {address}")
+                    #print(f"writing value {v} (converted to registers: {registers}) from {zone} -> {element} -> {k} to register address {address}")
     except Exception as e:
         print(e)
-        sys.exit(1)       
+        sys.exit(1)
 
 def main(): 
     inp_file = parse_arguments()
@@ -110,7 +110,7 @@ def main():
 
             en.runHydraulicAnalysis()
 
-            data = read_data(en)
+            data = read_data(en)#; print(data)
             write_data(client, data)
 
             en.nextHydraulicAnalysisStep()
