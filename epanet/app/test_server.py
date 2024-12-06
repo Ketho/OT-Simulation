@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import sys
 import time
 
 from pyModbusTCP.server import ModbusServer
@@ -35,11 +36,16 @@ def main():
 
     except KeyboardInterrupt:
         print(">--- Program interrupted by user ---")
+        sys.exit(0) # clean exit confirmed by user action.
+
+    except Exception as e:
+        print(e) 
+        sys.exit(1)
     
     finally:
-        server.stop()
-        print("Status: \033[91mStopped\033[0m")
+        if 'server' in locals():
+            server.stop()
+            print("Status: \033[91mStopped\033[0m")
     
 if __name__ == '__main__':
     main()
-
