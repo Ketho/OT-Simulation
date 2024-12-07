@@ -15,23 +15,7 @@ services:
       - plc_network
 
   # Central systems
-  openplc:
-    container_name: openplc
-    depends_on:
-      - scadalts
-    build:
-      context: ./openplc/.
-      dockerfile: Dockerfile
-      args:
-        script: script.st
-        database: master.sh
-    expose:
-      - "8080" 
-      - "502" # Access for ScadaLTS
-    ports:
-      - "8080:8080" # Used for external access and debugging
-    networks:
-      - plc_network
+  # Vuln webserver to be placed here
 
   scadalts:
     container_name: scadalts
@@ -88,15 +72,6 @@ services:
     networks:
       - intranet
 
-  # Zone 1
-  vuln_machine_1:
-    container_name: vuln_machine_1
-    image: ubuntu:latest
-    command: tail -f /dev/null
-    networks:
-      - intranet
-      - zone1
-
   plc1:
     container_name: plc1
     depends_on:
@@ -108,19 +83,10 @@ services:
         script: script.st
         database: slave.sh
     expose:
-      - "502"  # Only port 502 exposed as this will be a PLC slave
+      - "502"
+      - "8080"
     networks:
-      - zone1
       - plc_network
-
-  # Zone 2
-  vuln_machine_2:
-    container_name: vuln_machine_2
-    image: ubuntu:latest
-    command: tail -f /dev/null
-    networks:
-      - intranet
-      - zone2
 
   plc2:
     container_name: plc2
@@ -134,18 +100,9 @@ services:
         database: slave.sh
     expose:
       - "502"
+      - "8080"
     networks:
-      - zone2
       - plc_network
-
-  # Zone 3
-  vuln_machine_3:
-    container_name: vuln_machine_3
-    image: ubuntu:latest
-    command: tail -f /dev/null
-    networks:
-      - intranet
-      - zone3
 
   plc3:
     container_name: plc3
@@ -159,8 +116,24 @@ services:
         database: slave.sh
     expose:
       - "502"
+      - "8080"
     networks:
-      - zone3
+      - plc_network
+
+  plc4:
+    container_name: plc4
+    depends_on:
+      - scadalts
+    build:
+      context: ./openplc/.
+      dockerfile: Dockerfile
+      args:
+        script: script.st
+        database: slave.sh
+    expose:
+      - "502"
+      - "8080"
+    networks:
       - plc_network
 
   # Monitoring
@@ -205,8 +178,5 @@ volumes:
 networks:
   intranet:
   plc_network:
-  zone1:
-  zone2:
-  zone3:
   database:
   opensearch-net:
