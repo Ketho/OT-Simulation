@@ -63,15 +63,6 @@ services:
     networks:
       - database
 
-  operator:
-    container_name: operator
-    image: ubuntu:latest
-    depends_on:
-      - scadalts
-    command: tail -f /dev/null
-    networks:
-      - intranet
-
   plc1:
     container_name: plc1
     depends_on:
@@ -122,6 +113,22 @@ services:
 
   plc4:
     container_name: plc4
+    depends_on:
+      - scadalts
+    build:
+      context: ./openplc/.
+      dockerfile: Dockerfile
+      args:
+        script: script.st
+        database: slave.sh
+    expose:
+      - "502"
+      - "8080"
+    networks:
+      - plc_network
+
+  plc5:
+    container_name: plc5
     depends_on:
       - scadalts
     build:
