@@ -1,49 +1,56 @@
 #!/usr/bin/env python3
 import time
 import sys
+import threading
 
 from pyModbusTCP.server import ModbusServer
 
-def main():
+def start_server(host, port):
     try:
-        server = ModbusServer(host='127.0.0.1', port=502, no_block=True)
+        server = ModbusServer(host=host, port=port, no_block=True)
         server.start()
-        
-        if server.is_run:
-            print("=== Modbus server started successfully ===")
-            print("Status: \033[92mRunning\033[0m")
 
-            # server.data_bank.set_discrete_inputs(0, [False]*100)
-            # server.data_bank.set_coils(0, [False]*100)
-            # server.data_bank.set_input_registers(0, [0]*100)
-            server.data_bank.set_holding_registers(0, [0]*500)
+        if server.is_run:
+            # print(f"{host}:{port} -> \033[92mRunning\033[0m")
+            server.data_bank.set_holding_registers(0, [0]*100)
 
             while True:
-                # di = server.data_bank.get_discrete_inputs(0, 100)
-                # co = server.data_bank.get_coils(0, 100)
-                # ir = server.data_bank.get_input_registers(0, 100)
-                # hr = server.data_bank.get_holding_registers(0, 100)
-
-                hr_0_10 = server.data_bank.get_holding_registers(0, 10)
-                hr_100_110 = server.data_bank.get_holding_registers(100, 10)
-                hr_200_210 = server.data_bank.get_holding_registers(200, 10)
-
-                print()
-                print(f"   0-10: {hr_0_10}")
-                print(f"100-110: {hr_100_110}")
-                print(f"200-210: {hr_200_210}")
-
+                hr = server.data_bank.get_holding_registers(0, 10)
+                print(f"hr ({port}): {hr}")
                 time.sleep(3)
-    except KeyboardInterrupt:
-        print(">--- Program interrupted by user ---")
-        sys.exit(0) # clean exit confirmed by user action.
     except Exception as e:
-        print(e) 
+        print(f"ERROR on server {port}: {e}")
         sys.exit(1)
     finally:
         if 'server' in locals():
             server.stop()
-            print("Status: \033[91mStopped\033[0m")
-    
+
+def main():
+    try:
+        servers_config = [
+            ('127.0.0.1', 502),
+            ('127.0.0.1', 503),
+            ('127.0.0.1', 504),
+            ('127.0.0.1', 505),
+            ('127.0.0.1', 506)
+        ]
+
+        threads = []
+
+        for host, port in servers_config:
+            thread = threading.Thread(target=start_server, args=(host, port))
+            thread.daemon = True # ensures threads exit when the main program exits.
+            threads.append(thread)
+            thread.start()
+        
+        while True:
+            time.sleep(1)
+    except KeyboardInterrupt:
+        print(">--- Program interrupted by user ---")
+        sys.exit(0) # clean exit confirmed by user action.
+    except Exception as e:
+        print(f"ERROR in main: {e}")
+        sys.exit(1)
+
 if __name__ == '__main__':
     main()
