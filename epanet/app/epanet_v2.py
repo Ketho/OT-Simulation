@@ -39,7 +39,6 @@ def setup_clients(zones: set) -> dict[str, ModbusTcpClient]:
         for zone, client in clients.items():
             while not client.connect():
                 time.sleep(1)
-            print(f"=== Connected to {zone} ===")
         return clients
     except Exception as e:
         print(f"ERROR in setup_clients: {e}")
