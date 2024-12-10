@@ -32,10 +32,10 @@ def setup_clients(zones: set) -> dict[str, ModbusTcpClient]:
             zone: ModbusTcpClient(host=f'plc-{zone}', port=502) for zone in zones
         }
         # TEST
-        # clients = {
-        #     zone: ModbusTcpClient(host='127.0.0.1', port=502 + i)
-        #     for i, zone in enumerate(zones)
-        # }
+        #clients = {
+        #    zone: ModbusTcpClient(host='127.0.0.1', port=502 + i)
+        #    for i, zone in enumerate(zones)
+        #}
         for zone, client in clients.items():
             while not client.connect():
                 time.sleep(1)
@@ -93,7 +93,7 @@ def write_data(clients: dict[str, ModbusTcpClient], data: dict) -> None:
                     registers = client.convert_to_registers(float(value), client.DATATYPE.FLOAT32)
                     client.write_registers(address, registers)
                     # TEST
-                    print(f"writing value {value} (converted to registers: {registers}) from {zone} -> {element} -> {k} to register address {address}")
+                    #print(f"writing value {value} (converted to registers: {registers}) from {zone} -> {element} -> {k} to register address {address}")
     except Exception as e:
         print(f"ERROR in write_data: {e}")
         sys.exit(1)
