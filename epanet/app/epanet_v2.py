@@ -31,6 +31,11 @@ def setup_clients(zones: set) -> dict[str, ModbusTcpClient]:
         clients = {
             zone: ModbusTcpClient(host=f'plc-{zone}', port=502) for zone in zones
         }
+        # TEST
+        # clients = {
+        #     zone: ModbusTcpClient(host='127.0.0.1', port=502 + i)
+        #     for i, zone in enumerate(zones)
+        # }
         for zone, client in clients.items():
             while not client.connect():
                 time.sleep(1)
