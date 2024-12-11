@@ -63,8 +63,8 @@ services:
     networks:
       - database
 
-  plc1:
-    container_name: plc1
+  plc-zone0:
+    container_name: plc-zone0
     depends_on:
       - scadalts
     build:
@@ -72,15 +72,15 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: slave.sh
+        database: database.sh
     expose:
       - "502"
       - "8080"
     networks:
       - plc_network
 
-  plc2:
-    container_name: plc2
+  plc-zone1:
+    container_name: plc-zone1
     depends_on:
       - scadalts
     build:
@@ -88,15 +88,15 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: slave.sh
+        database: database.sh
     expose:
       - "502"
       - "8080"
     networks:
       - plc_network
 
-  plc3:
-    container_name: plc3
+  plc-zone2:
+    container_name: plc-zone2
     depends_on:
       - scadalts
     build:
@@ -104,15 +104,15 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: slave.sh
+        database: database.sh
     expose:
       - "502"
       - "8080"
     networks:
       - plc_network
 
-  plc4:
-    container_name: plc4
+  plc-zone3:
+    container_name: plc-zone3
     depends_on:
       - scadalts
     build:
@@ -120,15 +120,15 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: slave.sh
+        database: database.sh
     expose:
       - "502"
       - "8080"
     networks:
       - plc_network
 
-  plc5:
-    container_name: plc5
+  plc-zone4:
+    container_name: plc-zone4
     depends_on:
       - scadalts
     build:
@@ -136,7 +136,7 @@ services:
       dockerfile: Dockerfile
       args:
         script: script.st
-        database: slave.sh
+        database: database.sh
     expose:
       - "502"
       - "8080"
