@@ -6,6 +6,10 @@
 SQL_REMOVE_PROGRAM="DELETE FROM Programs"
 sqlite3 /OpenPLC_v3/webserver/openplc.db "$SQL_REMOVE_PROGRAM"
 
+# add new programe as "script.st"
+SQL_PROGRAM="INSERT INTO Programs (Name, Description, File, Date_upload) VALUES ('Program Name', 'Desc', 'script.st', strftime('%s', 'now'));"
+sqlite3 /OpenPLC_v3/webserver/openplc.db "$SQL_PROGRAM"
+
 # remove all existing slave devices
 SQL_REMOVE_DEVICE="DELETE FROM Slave_dev"
 sqlite3 /OpenPLC_v3/webserver/openplc.db "$SQL_REMOVE_DEVICE"
