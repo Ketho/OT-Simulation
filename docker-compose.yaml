@@ -5,7 +5,7 @@ services:
   epanet:
     container_name: epanet
     depends_on:
-      - openplc
+      - plc-zone0
     build:
       context: ./epanet/.
       dockerfile: Dockerfile
