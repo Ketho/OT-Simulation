@@ -81,7 +81,7 @@ services:
       context: ./openplc/.
       dockerfile: Dockerfile
       args:
-        script: script.st
+        script: watertanklogica.st
         database: database.sh
     expose:
       - "502"
@@ -97,7 +97,7 @@ services:
       context: ./openplc/.
       dockerfile: Dockerfile
       args:
-        script: script.st
+        script: waterwijklogica.st
         database: database.sh
     expose:
       - "502"
@@ -113,7 +113,7 @@ services:
       context: ./openplc/.
       dockerfile: Dockerfile
       args:
-        script: script.st
+        script: waterwijklogica.st
         database: database.sh
     expose:
       - "502"
@@ -129,7 +129,7 @@ services:
       context: ./openplc/.
       dockerfile: Dockerfile
       args:
-        script: script.st
+        script: waterwijklogica.st
         database: database.sh
     expose:
       - "502"
@@ -145,7 +145,7 @@ services:
       context: ./openplc/.
       dockerfile: Dockerfile
       args:
-        script: script.st
+        script: waterwijklogica.st
         database: database.sh
     expose:
       - "502"
