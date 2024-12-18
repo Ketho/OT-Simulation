@@ -15,7 +15,17 @@ services:
       - plc_network
 
   # Central systems
-  # Vuln webserver to be placed here
+  webserver:
+    container_name: webserver
+      build:
+        context: ./webserver/. 
+        dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    volumes:
+      - ./wordpress:/var/www/html
+    networks:
+      - intranet
 
   scadalts:
     container_name: scadalts
